@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドリンク原価率レポート</title>
+    <style>
+        @media print {
+            body { margin: 0; font-size: 12px; }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+        }
+
+        body {
+            font-family: 'Yu Gothic UI', 'Meiryo UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .document {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.2rem;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .header .date {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .executive-summary {
+            background: #f8f9fa;
+            border-left: 4px solid #2a5298;
+            padding: 25px;
+            margin-bottom: 40px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .executive-summary h2 {
+            margin: 0 0 15px 0;
+            color: #2a5298;
+            font-size: 1.4rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .summary-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .summary-item h3 {
+            margin: 0 0 15px 0;
+            color: #495057;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 8px;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 5px 0;
+        }
+
+        .metric-label {
+            color: #6c757d;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: #2a5298;
+            font-size: 1.5rem;
+            margin: 0 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2a5298;
+        }
+
+        .table-container {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            overflow: visible;
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .table-wrapper {
+            height: 500px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border: none;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 1px solid #dee2e6;
+            user-select: none;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f1f3f4;
+            user-select: text;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .font-weight-bold {
+            font-weight: 600;
+        }
+
+        .cost-rate-high {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .cost-rate-medium {
+            color: #fd7e14;
+            font-weight: 600;
+        }
+
+        .cost-rate-low {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 2px rgba(42, 82, 152, 0.2);
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .rank {
+            background: #6c757d;
+            color: white;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .rank-1 { background: #ffd700; color: #333; }
+        .rank-2 { background: #c0c0c0; color: #333; }
+        .rank-3 { background: #cd7f32; color: white; }
+
+        /* 分析セクション用スタイル */
+        .analysis-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .analysis-card {
+            background: white;
+            border-left: 5px solid;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .analysis-card.high-risk {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+        }
+
+        .analysis-card.medium-risk {
+            border-left-color: #fd7e14;
+            background: linear-gradient(135deg, #fff 0%, #fff8f0 100%);
+        }
+
+        .analysis-card.low-risk {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #fff 0%, #f8fff8 100%);
+        }
+
+        .analysis-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.2rem;
+        }
+
+        .analysis-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .key-findings h4,
+        .impact-analysis h4,
+        .trend-analysis h4,
+        .opportunity h4 {
+            color: #2a5298;
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+        }
+
+        .key-findings ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .key-findings li {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        .impact-analysis p,
+        .trend-analysis p,
+        .opportunity p {
+            margin: 0;
+            line-height: 1.5;
+            color: #495057;
+        }
+
+        /* アクションプラン用スタイル */
+        .action-plan-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid;
+        }
+
+        .action-card.urgent {
+            border-top-color: #dc3545;
+        }
+
+        .action-card.medium-term {
+            border-top-color: #fd7e14;
+        }
+
+        .action-card.long-term {
+            border-top-color: #6c757d;
+        }
+
+        .action-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .action-item {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .action-item h4 {
+            margin: 0 0 10px 0;
+            color: #2a5298;
+            font-size: 0.95rem;
+        }
+
+        .action-item ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .action-item li {
+            margin: 5px 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .action-priority {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #6c757d;
+        }
+
+        .financial-impact {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #e1f5fe;
+        }
+
+        .financial-impact h3 {
+            margin: 0 0 15px 0;
+            color: #1976d2;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .impact-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .impact-item h4 {
+            margin: 0 0 10px 0;
+            color: #2a5298;
+            font-size: 1rem;
+        }
+
+        .impact-item ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .impact-item li {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 1200px) {
+            .analysis-grid,
+            .action-plan-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .analysis-content {
+                grid-template-columns: 1fr;
+            }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .document {
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .summary-item {
+                padding: 15px;
+            }
+
+            .analysis-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .table-wrapper {
+                height: 400px;
+                font-size: 12px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px 6px;
+            }
+
+            .search-container {
+                flex-direction: column;
+                margin-bottom: 15px;
+            }
+
+            .search-input {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            .analysis-content {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .action-plan-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .action-item {
+                padding: 12px;
+            }
+
+            .executive-summary {
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+
+            .rank {
+                padding: 1px 6px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .table-wrapper {
+                height: 350px;
+            }
+
+            th, td {
+                padding: 6px 4px;
+                font-size: 11px;
+            }
+
+            .metric {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .metric-label, .metric-value {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="document">
+        <div class="header">
+            <h1>ドリンク原価率レポート</h1>
+            <p class="subtitle">経営分析・改善戦略資料</p>
+            <p class="date" id="current-date"></p>
+        </div>
+
+        <div class="content">
+            <div class="executive-summary">
+                <h2>📋 エグゼクティブサマリー</h2>
+                <p>本レポートは、当社取扱ドリンク商品の原価率分析結果および改善戦略をまとめた経営判断資料です。人気商品であるコロナ・レッドブル等の原価率30%超という収益性問題が発見され、価格調整による改善が必要な状況です。</p>
+
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <h3>ソフトドリンク部門</h3>
+                        <div class="metric">
+                            <span class="metric-label">商品数</span>
+                            <span class="metric-value" id="soft-count">--</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">平均原価率</span>
+                            <span class="metric-value" id="soft-avg">--%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">最高原価率</span>
+                            <span class="metric-value" id="soft-max">--%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">最低原価率</span>
+                            <span class="metric-value" id="soft-min">--%</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-item">
+                        <h3>アルコール部門</h3>
+                        <div class="metric">
+                            <span class="metric-label">商品数</span>
+                            <span class="metric-value" id="alcohol-count">--</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">平均原価率</span>
+                            <span class="metric-value" id="alcohol-avg">--%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">最高原価率</span>
+                            <span class="metric-value" id="alcohol-max">--%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">最低原価率</span>
+                            <span class="metric-value" id="alcohol-min">--%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="section">
+                    <h2 class="section-title">ソフトドリンク部門</h2>
+                    <div class="table-container">
+                        <div class="table-header">
+                            商品別原価率一覧（原価率降順）
+                        </div>
+                        <div class="search-container no-print">
+                            <input type="text" class="search-input" id="soft-search" placeholder="商品名で検索...">
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 60px;">順位</th>
+                                        <th>商品名</th>
+                                        <th class="text-right" style="width: 100px;">販売価格</th>
+                                        <th class="text-right" style="width: 100px;">原価</th>
+                                        <th class="text-right" style="width: 100px;">原価率</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="soft-drinks-table">
+                                    <tr><td colspan="5" class="text-center">データを読み込んでいます...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">アルコール部門</h2>
+                    <div class="table-container">
+                        <div class="table-header">
+                            商品別原価率一覧（原価率降順）
+                        </div>
+                        <div class="search-container no-print">
+                            <input type="text" class="search-input" id="alcohol-search" placeholder="商品名で検索...">
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 60px;">順位</th>
+                                        <th>商品名</th>
+                                        <th class="text-right" style="width: 100px;">販売価格</th>
+                                        <th class="text-right" style="width: 100px;">原価</th>
+                                        <th class="text-right" style="width: 100px;">原価率</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="alcohol-table">
+                                    <tr><td colspan="5" class="text-center">データを読み込んでいます...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">📊 原価率分析・考察</h2>
+
+                <div class="analysis-section">
+                    <div class="analysis-card high-risk">
+                        <h3>🔴 高リスク商品群（原価率30%以上）</h3>
+                        <div class="analysis-content">
+                            <div class="key-findings">
+                                <h4>主要課題</h4>
+                                <ul>
+                                    <li><strong>超高級シャンパン</strong>：ルイロデレール クリスタル(47.6%)、ペリエジュエ ベルエポック(43.6%)</li>
+                                    <li><strong>人気ビール</strong>：コロナ(36.3%) - 高頻度注文商品で収益への影響大</li>
+                                    <li><strong>プレミアムウイスキー</strong>：白州(34.7%)、山崎12年(34.5%)、山崎(33.4%)</li>
+                                    <li><strong>特殊ドリンク</strong>：シャンディガフ(38.1%)、レッドアイ(36.3%) - カクテル系</li>
+                                </ul>
+                            </div>
+                            <div class="impact-analysis">
+                                <h4>収益への影響</h4>
+                                <p>コロナは日常的によく注文される商品のため、高原価率が継続的な収益を圧迫。高級シャンパンは単価が高いため1回の注文でも大きな収益損失となる。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-card medium-risk">
+                        <h3>🟡 注意商品群（原価率15-30%）</h3>
+                        <div class="analysis-content">
+                            <div class="key-findings">
+                                <h4>監視対象</h4>
+                                <ul>
+                                    <li><strong>プレミアムウイスキー</strong>：マッカラン(31.8%)、響(24.4%)、知多(22.4%)</li>
+                                    <li><strong>プレミアムビール</strong>：ハイネケン(31.8%)</li>
+                                    <li><strong>スピリッツ</strong>：ウォッカ(25.0%)、ラフロイグ(21.7%)</li>
+                                </ul>
+                            </div>
+                            <div class="trend-analysis">
+                                <h4>トレンド分析</h4>
+                                <p>プレミアム商品の原価率上昇傾向。仕入れ価格の見直しまたは販売価格の調整が必要な局面。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-card low-risk">
+                        <h3>🟢 優良商品群（原価率15%未満）</h3>
+                        <div class="analysis-content">
+                            <div class="key-findings">
+                                <h4>高収益商品</h4>
+                                <ul>
+                                    <li><strong>茶類</strong>：緑茶(2.2%)、ウーロン茶(2.2%)、紅茶ポット(1.9%) - 最高収益率</li>
+                                    <li><strong>基本ドリンク</strong>：コーヒー(5.0%)、炭酸水(6.7%)</li>
+                                    <li><strong>スピリッツ</strong>：テキーラ(6.3%)、イエーガー(6.3%)</li>
+                                </ul>
+                            </div>
+                            <div class="opportunity">
+                                <h4>拡販機会</h4>
+                                <p>茶類の原価率1.9-2.8%は最高水準。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">⚡ 必要措置・アクションプラン</h2>
+
+                <div class="action-plan-grid">
+                    <div class="action-card urgent">
+                        <h3>🚨 緊急対応（30日以内）</h3>
+                        <div class="action-items">
+                            <div class="action-item">
+                                <h4>1. 人気商品の価格調整例</h4>
+                                <ul>
+                                    <li>コロナ：¥900 → ¥1,100（原価率29.7%）- 最優先</li>
+                                    <li>ハイネケン：¥900 → ¥1,200（原価率23.8%）</li>
+                                    <li>白州：¥1,500 → ¥1,800（原価率28.9%）</li>
+                                </ul>
+                                <div class="action-priority">優先度：最高</div>
+                            </div>
+                            <div class="action-item">
+                                    <li>仕入れ先との価格見直し・オーリック以外の発注先</li>
+                                    <li>高級ウイスキーに力を入れている酒屋との卸売契約</li>
+                                </ul>
+                                <div class="action-priority">優先度：高</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-card medium-term">
+                        <h3>📈 中期対応（3ヶ月以内）</h3>
+                        <div class="action-items">
+                            <div class="action-item">
+                                <h4>3. 高収益商品の推奨強化</h4>
+                                <ul>
+                                    <li>茶類セットメニューの積極的提案</li>
+                                    <li>テキーラ・イエーガーショットの推奨</li>
+                                </ul>
+                                <div class="action-priority">優先度：中</div>
+                            </div>
+                            <div class="action-item">
+                                <h4>4. 焼酎・サワー類の最適化</h4>
+                                <ul>
+                                    <li>原価率10%台の焼酎類の推奨</li>
+                                    <li>レモンサワーなど人気サワーの販売強化</li>
+                                    <li>ボトルキープサービスの導入検討（高倉さんに実施済み）</li>
+                                </ul>
+                                <div class="action-priority">優先度：中</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-card long-term">
+                        <h3>🎯 長期戦略（6ヶ月以内）</h3>
+                        <div class="action-items">
+                            <div class="action-item">
+                                <h4>5. 商品ポートフォリオ・サービス面再構築</h4>
+                                <ul>
+                                    <li>BandHotelとの協力⇒ショップカードによる広告協力</li>
+                                    <li>オリジナルブランド商品の開発（オリジナルカクテルorスムージー）</li>
+                                    <li>季節限定メニューでの価格テスト</li>
+                                </ul>
+                                <div class="action-priority">優先度：中</div>
+                            </div>
+                            <div class="action-item">
+                                <h4>6. システム・プロセス改善</h4>
+                                <ul>
+                                    <li>月次原価率レビュー体制確立</li>
+                                </ul>
+                                <div class="action-priority">優先度：低</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>※ 原価率25%以上は<span class="cost-rate-high">赤色</span>、15-25%は<span class="cost-rate-medium">橙色</span>、15%未満は<span class="cost-rate-low">緑色</span>で表示</p>
+        </div>
+    </div>
+
+    <script>
+        // 現在の日付を設定
+        document.getElementById('current-date').textContent =
+            new Date().toLocaleDateString('ja-JP', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            });
+
+        // データの定義
+        const embeddedData = {
+                softDrinks: [
+                    {name: "伊予コーラ", price: 700, cost: 288, costRate: 41.1},
+                    {name: "レッドブル", price: 600, cost: 199, costRate: 33.2},
+                    {name: "シンデレラ", price: 700, cost: 186, costRate: 26.6},
+                    {name: "Frozen Berry Lemon Lime", price: 1000, cost: 250, costRate: 25.0},
+                    {name: "プッシーキャット", price: 700, cost: 169, costRate: 24.1},
+                    {name: "コーラ", price: 600, cost: 135, costRate: 22.5},
+                    {name: "ジンジャーエール", price: 600, cost: 135, costRate: 22.5},
+                    {name: "トニックウォーター", price: 600, cost: 135, costRate: 22.5},
+                    {name: "Creamy Mint Banana Frappe", price: 1000, cost: 220, costRate: 22.0},
+                    {name: "グアバジュース", price: 700, cost: 140, costRate: 20.0},
+                    {name: "マンゴージュース", price: 600, cost: 94, costRate: 15.7},
+                    {name: "KYOTAN", price: 1000, cost: 139, costRate: 13.9},
+                    {name: "パイナップルジュース", price: 600, cost: 82, costRate: 13.7},
+                    {name: "コークオレンジ", price: 700, cost: 95, costRate: 13.6},
+                    {name: "オレンジソニック", price: 700, cost: 90, costRate: 12.9},
+                    {name: "ジンジャーコーラ", price: 700, cost: 90, costRate: 12.9},
+                    {name: "オレンジフラワークーラー", price: 700, cost: 80, costRate: 11.4},
+                    {name: "ブラック&コーラ", price: 700, cost: 75, costRate: 10.7},
+                    {name: "アップルジュース", price: 600, cost: 62, costRate: 10.3},
+                    {name: "グレープフルーツジュース", price: 600, cost: 56, costRate: 9.3},
+                    {name: "シャーリーテンプル", price: 700, cost: 60, costRate: 8.6},
+                    {name: "オレンジジュース", price: 600, cost: 49, costRate: 8.2},
+                    {name: "炭酸水", price: 600, cost: 40, costRate: 6.7},
+                    {name: "カフェラテ", price: 800, cost: 50, costRate: 6.3},
+                    {name: "茉莉花", price: 800, cost: 50, costRate: 6.3},
+                    {name: "コーヒー", price: 600, cost: 30, costRate: 5.0},
+                    {name: "ローズヒップ", price: 800, cost: 30, costRate: 3.8},
+                    {name: "カモミール", price: 800, cost: 28, costRate: 3.5},
+                    {name: "ジャスミン茶", price: 600, cost: 17, costRate: 2.8},
+                    {name: "ウーロン茶", price: 600, cost: 13, costRate: 2.2},
+                    {name: "緑茶", price: 600, cost: 13, costRate: 2.2},
+                    {name: "紅茶(ポット)", price: 800, cost: 15, costRate: 1.9},
+                    {name: "緑茶(ポット)", price: 800, cost: 15, costRate: 1.9}
+                ],
+                alcoholDrinks: [
+                    {name: "ルイロデレール クリスタル ブリュット 13 白", price: 90000, cost: 42800, costRate: 47.6},
+                    {name: "ペリエジュエ ベルエポック 白", price: 50000, cost: 21800, costRate: 43.6},
+                    {name: "シャンディガフ", price: 800, cost: 305, costRate: 38.1},
+                    {name: "モエシャンドン ブリュット インペリアル 白", price: 18000, cost: 6780, costRate: 37.7},
+                    {name: "コロナ", price: 900, cost: 327, costRate: 36.3},
+                    {name: "レッドアイ", price: 800, cost: 290, costRate: 36.3},
+                    {name: "白州", price: 1500, cost: 520, costRate: 34.7},
+                    {name: "山崎12年", price: 2800, cost: 965, costRate: 34.5},
+                    {name: "山崎", price: 1600, cost: 534, costRate: 33.4},
+                    {name: "ヴーヴクリコ イエローラベル ブリュット 白", price: 20000, cost: 6600, costRate: 33.0},
+                    {name: "マッカラン", price: 1800, cost: 573, costRate: 31.8},
+                    {name: "ハイネケン", price: 900, cost: 286, costRate: 31.8},
+                    {name: "ウォッカ", price: 800, cost: 200, costRate: 25.0},
+                    {name: "響", price: 2000, cost: 488, costRate: 24.4},
+                    {name: "知多", price: 1200, cost: 269, costRate: 22.4},
+                    {name: "ラフロイグ", price: 1200, cost: 260, costRate: 21.7},
+                    {name: "アマレット", price: 800, cost: 145, costRate: 18.1},
+                    {name: "パッソア", price: 800, cost: 145, costRate: 18.1},
+                    {name: "コカレロ", price: 800, cost: 137, costRate: 17.1},
+                    {name: "コカボム", price: 900, cost: 150, costRate: 16.7},
+                    {name: "カシス", price: 800, cost: 124, costRate: 15.5},
+                    {name: "ラム", price: 800, cost: 123, costRate: 15.4},
+                    {name: "ワイルドターキー", price: 1200, cost: 176, costRate: 14.7},
+                    {name: "カンパリ", price: 800, cost: 112, costRate: 14.0},
+                    {name: "角", price: 800, cost: 111, costRate: 13.9},
+                    {name: "マリブ", price: 800, cost: 110, costRate: 13.8},
+                    {name: "アスティ", price: 11000, cost: 1511, costRate: 13.7},
+                    {name: "ピーチ", price: 800, cost: 94, costRate: 11.8},
+                    {name: "カルーア", price: 800, cost: 91, costRate: 11.4},
+                    {name: "二階堂（麦）", price: 700, cost: 76, costRate: 10.9},
+                    {name: "レモンサワー", price: 800, cost: 85, costRate: 10.6},
+                    {name: "白岳しろ（米）", price: 700, cost: 72, costRate: 10.3},
+                    {name: "黒霧島（芋）", price: 700, cost: 71, costRate: 10.1},
+                    {name: "ジン", price: 800, cost: 80, costRate: 10.0},
+                    {name: "テキーラ", price: 800, cost: 50, costRate: 6.3},
+                    {name: "イエーガー", price: 800, cost: 50, costRate: 6.3}
+                ],
+                softDrinkStats: {
+                    count: 33,
+                    avgCostRate: "13.4",
+                    maxCostRate: 41.1,
+                    minCostRate: 1.9
+                },
+                alcoholStats: {
+                    count: 36,
+                    avgCostRate: "22.0",
+                    maxCostRate: 47.6,
+                    minCostRate: 6.3
+                }
+        };
+
+        // ページ読み込み完了後に実行
+        function initializePage() {
+            window.tableData = embeddedData;
+            loadData();
+        }
+
+        // DOMContentLoadedイベントで初期化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+
+        function getCostRateClass(rate) {
+            if (rate >= 25) return 'cost-rate-high';
+            if (rate >= 15) return 'cost-rate-medium';
+            return 'cost-rate-low';
+        }
+
+        function getRankClass(rank) {
+            if (rank === 1) return 'rank-1';
+            if (rank === 2) return 'rank-2';
+            if (rank === 3) return 'rank-3';
+            return '';
+        }
+
+        let dataLoaded = false;
+
+        function loadData() {
+            if (dataLoaded) return;
+            dataLoaded = true;
+
+            const { softDrinks, alcoholDrinks, softDrinkStats, alcoholStats } = window.tableData;
+
+            // 統計情報を更新
+            document.getElementById('soft-count').textContent = softDrinkStats.count + '品';
+            document.getElementById('soft-avg').textContent = softDrinkStats.avgCostRate + '%';
+            document.getElementById('soft-max').textContent = softDrinkStats.maxCostRate + '%';
+            document.getElementById('soft-min').textContent = softDrinkStats.minCostRate + '%';
+
+            document.getElementById('alcohol-count').textContent = alcoholStats.count + '品';
+            document.getElementById('alcohol-avg').textContent = alcoholStats.avgCostRate + '%';
+            document.getElementById('alcohol-max').textContent = alcoholStats.maxCostRate + '%';
+            document.getElementById('alcohol-min').textContent = alcoholStats.minCostRate + '%';
+
+            // ソフトドリンクテーブルを更新
+            const softTableBody = document.getElementById('soft-drinks-table');
+            softTableBody.innerHTML = softDrinks.map((item, index) => `
+                <tr>
+                    <td class="text-center">
+                        <span class="rank ${getRankClass(index + 1)}">${index + 1}</span>
+                    </td>
+                    <td class="font-weight-bold">${item.name}</td>
+                    <td class="text-right">¥${item.price.toLocaleString()}</td>
+                    <td class="text-right">¥${item.cost.toLocaleString()}</td>
+                    <td class="text-right ${getCostRateClass(item.costRate)}">${item.costRate}%</td>
+                </tr>
+            `).join('');
+
+            // アルコールテーブルを更新
+            const alcoholTableBody = document.getElementById('alcohol-table');
+            alcoholTableBody.innerHTML = alcoholDrinks.map((item, index) => `
+                <tr>
+                    <td class="text-center">
+                        <span class="rank ${getRankClass(index + 1)}">${index + 1}</span>
+                    </td>
+                    <td class="font-weight-bold">${item.name}</td>
+                    <td class="text-right">¥${item.price.toLocaleString()}</td>
+                    <td class="text-right">¥${item.cost.toLocaleString()}</td>
+                    <td class="text-right ${getCostRateClass(item.costRate)}">${item.costRate}%</td>
+                </tr>
+            `).join('');
+
+            // 検索機能を設定
+            setupSearch();
+        }
+
+        let searchSetup = false;
+
+        function setupSearch() {
+            if (searchSetup) return;
+            searchSetup = true;
+
+            const softSearch = document.getElementById('soft-search');
+            const alcoholSearch = document.getElementById('alcohol-search');
+
+            if (softSearch) {
+                softSearch.addEventListener('input', (e) => {
+                    e.stopPropagation();
+                    filterTable('soft-drinks-table', softSearch.value);
+                });
+            }
+
+            if (alcoholSearch) {
+                alcoholSearch.addEventListener('input', (e) => {
+                    e.stopPropagation();
+                    filterTable('alcohol-table', alcoholSearch.value);
+                });
+            }
+        }
+
+        function filterTable(tableId, searchTerm) {
+            const table = document.getElementById(tableId);
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const productNameCell = rows[i].getElementsByTagName('td')[1]; // 商品名は2番目のセル
+                if (productNameCell) {
+                    const txtValue = productNameCell.textContent || productNameCell.innerText;
+                    if (txtValue.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+
+            // スクロール位置をリセットしない
+            return false;
+        }
+    </script>
+</body>
+</html>
