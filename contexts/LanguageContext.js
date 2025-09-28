@@ -83,7 +83,7 @@ export const LanguageProvider = ({ children }) => {
         seating: '席数: 24席（ソファ席20席、カウンター席4席）',
         shareCharge: 'シェアチャージ: 800円/1人（テーブルチャージ等はなし）',
         payment: '支払い: クレジットカード可（VISA、Master、JCB、AMEX、Diners）',
-        reservation: '食べログやhotpepperからネット予約も可能です'
+        reservation: '食べログやHotpepperからネット予約も可能です'
       },
       menu: {
         title: 'Menu',
