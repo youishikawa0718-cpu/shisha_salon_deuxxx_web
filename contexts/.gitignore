@@ -1,0 +1,26 @@
+# LINEアルバムの画像ファイルを除外（コメントアウト）
+# LINE_ALBUM_*.jpg
+# S__*.jpg
+
+# 画像ファイル全般（必要に応じて）
+# *.jpg
+# *.jpeg
+# *.png
+# *.gif
+
+# ノードモジュール
+node_modules/
+
+# ログファイル
+*.log
+
+# 環境設定ファイル
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# システムファイル
+.DS_Store
+Thumbs.db

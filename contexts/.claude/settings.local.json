@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/youis/src/shisha-salon-backend/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
