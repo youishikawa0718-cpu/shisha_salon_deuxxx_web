@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../LanguageContext';
 
 const PhotoExperience = () => {
   const { t } = useLanguage();
@@ -22,14 +22,14 @@ const PhotoExperience = () => {
             </div>
           </div>
           <div className="experience-image">
-            <img src={require('../フレーバー.jpg')} alt="Premium Shisha Experience" />
+            <img src="/assets/images/flavor.jpg" alt="Premium Shisha Experience" />
           </div>
         </div>
 
         {/* Drinks Experience */}
         <div className="experience-item reverse">
           <div className="experience-image">
-            <img src={require('../ドリンク.jpg')} alt="Premium Drinks & Atmosphere" />
+            <img src="/assets/images/drink.jpg" alt="Premium Drinks & Atmosphere" />
           </div>
           <div className="experience-content">
             <div className="experience-text">
@@ -58,14 +58,14 @@ const PhotoExperience = () => {
             </div>
           </div>
           <div className="experience-image">
-            <img src={require('../昼景色.jpg')} alt="Luxury Ambiance & River View" />
+            <img src="/assets/images/lunch.jpg" alt="Luxury Ambiance & River View" />
           </div>
         </div>
 
         {/* Night Experience */}
         <div className="experience-item reverse">
           <div className="experience-image">
-            <img src={require('../夜シーシャ台＋景色.jpg')} alt="Premium Drinks & Atmosphere" />
+            <img src="/assets/images/dark.jpg" alt="Premium Drinks & Atmosphere" />
           </div>
           <div className="experience-content">
             <div className="experience-text">
