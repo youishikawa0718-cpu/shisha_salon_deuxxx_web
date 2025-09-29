@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/shisha_salon_deuxxx_web/static/css/main.96b7482f.css",
+    "main.js": "/shisha_salon_deuxxx_web/static/js/main.dc94ceb5.js",
+    "static/media/lunch.jpg": "/shisha_salon_deuxxx_web/static/media/lunch.eefe7c18b45f831bd42b.jpg",
+    "index.html": "/shisha_salon_deuxxx_web/index.html",
+    "main.96b7482f.css.map": "/shisha_salon_deuxxx_web/static/css/main.96b7482f.css.map",
+    "main.dc94ceb5.js.map": "/shisha_salon_deuxxx_web/static/js/main.dc94ceb5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.96b7482f.css",
+    "static/js/main.dc94ceb5.js"
+  ]
+}
