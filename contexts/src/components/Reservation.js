@@ -27,7 +27,7 @@ const Reservation = () => {
   useEffect(() => {
     const fetchSeats = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/seats');
+        const response = await fetch('http://localhost:3001/api/seats');
         if (response.ok) {
           const seatsData = await response.json();
           setSeats(seatsData);
@@ -49,7 +49,7 @@ const Reservation = () => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/seats/available?date=${date}&start_time=${startTime}&end_time=${endTime}`
+        `http://localhost:3001/api/seats/available?date=${date}&start_time=${startTime}&end_time=${endTime}`
       );
       if (response.ok) {
         const availableSeatsData = await response.json();
@@ -174,13 +174,26 @@ const Reservation = () => {
     setSubmitMessage('');
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/reservations', {
+      // Node.jsバックエンド用にデータ形式を変換
+      const requestData = {
+        customerName: formData.customer_name,
+        customerPhone: formData.customer_phone,
+        customerEmail: formData.customer_email || null,
+        seatId: parseInt(formData.seat_id),
+        reservationDate: formData.reservation_date,
+        startTime: formData.start_time,
+        endTime: formData.end_time,
+        partySize: parseInt(formData.party_size),
+        specialRequests: formData.special_requests || null,
+      };
+
+      const response = await fetch('http://localhost:3001/api/reservations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(requestData),
       });
 
       const data = await response.json();

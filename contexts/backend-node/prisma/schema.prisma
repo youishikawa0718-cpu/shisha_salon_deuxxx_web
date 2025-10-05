@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  name              String
+  email             String    @unique
+  emailVerifiedAt   DateTime? @map("email_verified_at")
+  password          String
+  rememberToken     String?   @map("remember_token")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Seat {
+  id           Int           @id @default(autoincrement())
+  name         String
+  type         String        @default("regular")
+  capacity     Int
+  description  String?
+  isActive     Boolean       @default(true) @map("is_active")
+  hourlyRate   Float         @map("hourly_rate")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  reservations Reservation[]
+
+  @@map("seats")
+}
+
+model Reservation {
+  id              Int      @id @default(autoincrement())
+  customerName    String   @map("customer_name")
+  customerPhone   String   @map("customer_phone")
+  customerEmail   String?  @map("customer_email")
+  seatId          Int      @map("seat_id")
+  reservationDate DateTime @map("reservation_date")
+  startTime       DateTime @map("start_time")
+  endTime         DateTime @map("end_time")
+  partySize       Int      @map("party_size")
+  specialRequests String?  @map("special_requests")
+  status          String   @default("pending")
+  depositAmount   Float?   @map("deposit_amount")
+  depositPaid     Boolean  @default(false) @map("deposit_paid")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  seat            Seat     @relation(fields: [seatId], references: [id])
+
+  @@map("reservations")
+}
+
+model TimeSlot {
+  id          Int      @id @default(autoincrement())
+  startTime   DateTime @map("start_time")
+  endTime     DateTime @map("end_time")
+  isAvailable Boolean  @default(true) @map("is_available")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("time_slots")
+}

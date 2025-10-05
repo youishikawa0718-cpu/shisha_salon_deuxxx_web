@@ -1,0 +1,115 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "menu": "Menu",
+    "reservation": "Reservation",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Shisha Salon Deuxxx",
+    "subtitle": "那珂川沿いリバーサイドで楽しむ プレミアムシーシャ体験",
+    "description": "最高品質のシーシャと心地よい空間で、特別なひとときをお過ごしください。",
+    "menuButton": "メニューを見る",
+    "contactButton": "お問い合わせ",
+    "scrollDown": "Scroll Down"
+  },
+  "about": {
+    "title": "About Deuxxx",
+    "description1": "福岡市中央区春吉に位置するShisha Salon Deuxxx(シーシャサロン デュクシ)は、那珂川沿いのリバーサイドにあるシーシャ専門店です。",
+    "description2": "ホテル・ザ・博多テラスの2階にあり、天井が高く開放感のある空間で、那珂川とキャナルシティの景色を楽しみながらリラックスできます。シーシャは濃い煙感と、一流のシーシャパッカーによる丁寧なセッティングで、初心者から上級者まで満足いただける品質を提供しています。",
+    "feature1Title": "リバーサイドビュー",
+    "feature1Description": "那珂川とキャナルシティの景色を楽しみながら",
+    "feature2Title": "快適な設備",
+    "feature2Description": "無料Wi-Fi、電源完備、バリアフリー対応"
+  },
+  "reservation": {
+    "title": "ご予約",
+    "subtitle": "お気軽にご予約ください。最高のシーシャ体験をご提供いたします。",
+    "businessHours": "営業時間",
+    "hoursWeekday": "月曜〜木曜：",
+    "hoursWeekend": "金曜・土曜・祝前日：",
+    "hoursSunday": "日曜・祝日：",
+    "timeWeekday": "12:00 〜 27:00（翌朝3:00）",
+    "timeWeekend": "12:00 〜 29:00（翌朝5:00）",
+    "timeSunday": "12:00 〜 27:00（翌朝3:00）",
+    "name": "お名前",
+    "phone": "電話番号",
+    "email": "メールアドレス",
+    "date": "予約日",
+    "time": "時間",
+    "people": "人数",
+    "requests": "特別なご要望",
+    "submit": "予約する",
+    "submitting": "送信中...",
+    "success": "ご予約ありがとうございます！確認のお電話をさせていただきます。",
+    "error": "予約に失敗しました。もう一度お試しください。"
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "お問い合わせ",
+    "businessHours": "営業時間",
+    "businessHours1": "月〜木・日: 12:00〜翌3:00（L.O. 2:00）",
+    "businessHours2": "金・土・祝前日: 12:00〜翌5:00（L.O. 4:00）",
+    "closedDay": "定休日: なし",
+    "address": "住所",
+    "addressDetail": "〒810-0003 福岡県福岡市中央区春吉2-4-14 ホテル・ザ・博多テラス 2F-E",
+    "phone": "電話番号",
+    "phoneNumber": "050-3186-4609",
+    "access": "アクセス",
+    "access1": "天神南駅から徒歩約10分",
+    "access2": "渡辺通駅から徒歩約7分",
+    "usage": "ご利用について",
+    "seating": "席数: 24席（ソファ席20席、カウンター席4席）",
+    "shareCharge": "シェアチャージ: 800円/1人（テーブルチャージ等はなし）",
+    "payment": "支払い: クレジットカード可（VISA、Master、JCB、AMEX、Diners）",
+    "reservation": "食べログやHotpepperからネット予約も可能です"
+  },
+  "menu": {
+    "title": "Menu",
+    "categories": {
+      "leaf": "シーシャ葉の種類",
+      "drink": "ソフトドリンク",
+      "alcohol": "アルコール",
+      "food": "フード"
+    },
+    "notes": [
+      "※シェアチャージ: 800円/1人",
+      "※ワンドリンクオーダー別途: 600円〜",
+      "※お好みの味や煙感に応じてカスタマイズ可能"
+    ]
+  },
+  "footer": {
+    "businessHours": "営業時間",
+    "businessHours1": "月〜木・日: 12:00〜翌3:00",
+    "businessHours2": "金・土・祝前日: 12:00〜翌5:00",
+    "contact": "お問い合わせ",
+    "access": "アクセス",
+    "accessDetail1": "天神南駅徒歩約10分",
+    "accessDetail2": "ホテル・ザ・博多テラス 2F-E",
+    "officialSite": "公式サイト",
+    "rightsReserved": "All rights reserved."
+  },
+  "photoExperience": {
+    "shisha": {
+      "title": "Shisha",
+      "description1": "厳選されたフレーバーと最高品質のシーシャ葉で、深く満足感のあるシーシャ体験をお楽しみください。",
+      "description2": "Al Fakher、DOZAj、Azure、Afzal、Darkside、Boncheなど、世界中から取り寄せたフレーバーをご用意しております。"
+    },
+    "drinks": {
+      "title": "Drinks",
+      "description1": "フレッシュジュースから本格的なノンアルコールカクテル、プレミアムシャンパンまで豊富なドリンクメニューをご用意。",
+      "description2": "シーシャとの相性を考え抜いたドリンクで、より深い味わいの体験をお届けします。"
+    },
+    "day": {
+      "title": "Day",
+      "description1": "那珂川とキャナルシティを望むリバーサイドビューと、洗練されたインテリアが作り出す上質な空間。",
+      "description2": "昼は自然光に満ちた開放的な雰囲気、夜は幻想的な照明に包まれたラウンジタイムをお楽しみください。"
+    },
+    "night": {
+      "title": "Night",
+      "description1": "夜は幻想的なライティングと贅沢な雰囲気で、特別なひとときをお過ごしください。",
+      "description2": "プレミアムドリンクとシーシャの組み合わせで、深夜まで続くリラックスタイムを。"
+    }
+  }
+}
